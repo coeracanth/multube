@@ -7,7 +7,7 @@ import { produce } from "immer";
 
 export function Root() {
   const [cols, setCols] = useState(1);
-  const [st, dispatch] = useReducer(reducer, { list: [] });
+  const [st, dispatch] = useReducer(reducer, { list: [{ id: getId() }] });
 
   const moviesParent = css(
     {
