@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "strict": true,
+    "jsx": "react",
+    "jsxFactory": "h",
+    "sourceMap": true,
+    "lib": ["es2017","dom"]
+  },
+  "exclude": ["node_modules"]
+}
