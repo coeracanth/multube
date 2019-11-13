@@ -2,6 +2,7 @@ import { h } from "preact";
 import { css } from "emotion";
 import { fill } from "../fill";
 import { useState } from "preact/hooks";
+import { Actions, ElementId } from "../root";
 
 const child = css(
   {
@@ -29,7 +30,12 @@ function getURLParams(path: string) {
   });
 }
 
-export function MovieChild() {
+export function MovieChild(props: {
+  state: { id: ElementId };
+  dispatch: (action: Actions) => void;
+}) {
+  const { state, dispatch } = props;
+
   /** 埋め込み用のUrlのbase */
   const baseUrl = "https://www.youtube.com/embed/";
   const [url, setUrl] = useState("");
@@ -39,7 +45,7 @@ export function MovieChild() {
       <div
         class={css({
           display: "grid",
-          gridTemplateColumns: "auto 1fr",
+          gridTemplateColumns: "auto 1fr auto",
         })}
       >
         <span>URL : </span>
@@ -94,6 +100,11 @@ export function MovieChild() {
             setUrl(baseUrl + val);
           }}
         ></input>
+        <button
+          onClick={() => dispatch({ type: "del", payload: { id: state.id } })}
+        >
+          Del
+        </button>
       </div>
       <div>
         <iframe class={fill} src={url}></iframe>
