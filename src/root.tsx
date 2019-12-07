@@ -75,6 +75,15 @@ const reducer = (st: IState, action: Actions) => {
       return produce(st, draft => {
         draft.list = st.list.filter(x => x.id !== action.payload.id);
       });
+    case "move":
+      return produce(st, draft => {
+        const fromIndex = st.list.findIndex(
+          x => x.id === action.payload.target
+        );
+        const toIndex = st.list.findIndex(x => x.id === action.payload.to);
+        const from = draft.list.splice(fromIndex, 1);
+        draft.list.splice(toIndex, 0, ...from);
+      });
     default:
       return st;
   }
@@ -93,4 +102,9 @@ interface ADel {
   type: "del";
   payload: { id: ElementId };
 }
-export type Actions = AAdd | ADel;
+interface AMove {
+  type: "move";
+  payload: { target: ElementId; to: ElementId };
+}
+
+export type Actions = AAdd | ADel | AMove;

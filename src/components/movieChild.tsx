@@ -36,16 +36,55 @@ export function MovieChild(props: {
 }) {
   const { state, dispatch } = props;
 
+  const format = "itemId";
+
+  function dragStart(event: DragEvent) {
+    const dt = event.dataTransfer;
+    if (dt == null) {
+      return;
+    }
+
+    dt.setData(format, state.id);
+  }
+
+  function dragOver(event: DragEvent) {
+    event.preventDefault();
+    const dt = event.dataTransfer;
+    if (dt == null) {
+      return;
+    }
+    dt.dropEffect = "move";
+  }
+
+  function drop(event: DragEvent) {
+    event.stopPropagation();
+
+    const dt = event.dataTransfer;
+    if (dt == null) {
+      return;
+    }
+
+    const targetId = dt.getData(format);
+    dispatch({ type: "move", payload: { target: targetId, to: state.id } });
+  }
+
   /** 埋め込み用のUrlのbase */
   const baseUrl = "https://www.youtube.com/embed/";
+
   const [url, setUrl] = useState("");
 
   return (
-    <div class={child}>
+    <div
+      class={child}
+      draggable={true}
+      onDragStart={dragStart}
+      onDragOver={dragOver}
+      onDrop={drop}
+    >
       <div
         class={css({
           display: "grid",
-          gridTemplateColumns: "auto 1fr auto",
+          gridTemplateColumns: "auto 1fr auto auto",
         })}
       >
         <span>URL : </span>
